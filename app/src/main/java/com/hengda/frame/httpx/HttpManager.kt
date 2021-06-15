@@ -4,14 +4,14 @@ import com.hengda.frame.httpx.bean.TestBean
 import com.hengda.frame.httpx.bean.TestBeanChind
 import com.hengda.frame.httpx.library.BaseHttpManager
 import com.hengda.frame.httpx.library.handle.Result
-import com.hengda.frame.httpx.library.response.ApiResponse
+
 class HttpManager : BaseHttpManager() {
 
     //==============your code ====================
 
     suspend fun doTest(): Result<TestBean?> = request(apiService.test())
 
-    suspend fun doTestWithResp(): Result<ApiResponse<TestBeanChind>?> = requestWithResp(
+    suspend fun doTestWithResp(): Result<TestBeanChind?> = requestWithResp(
         apiService.test1()
     )
     //==================================

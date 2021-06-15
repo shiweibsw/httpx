@@ -75,16 +75,16 @@ abstract class BaseHttpManager {
             }
         }
 
-    suspend fun <T> requestWithResp(deferred: Deferred<Response<ApiResponse<T>>>): Result<ApiResponse<T>?> =
+    suspend fun <T> requestWithResp(deferred: Deferred<Response<ApiResponse<T>>>): Result<T?> =
         withContext(Dispatchers.IO) {
             try {
                 val response = deferred.await()
                 if (response.isSuccessful) {
                     if (response.body() != null) {
                         if (response.body()?.getCode() == successCode) {
-                            Result.Success(response.body())
+                            Result.Success(response.body()?.getDatas())
                         } else {
-                            Result.Error(response.body()!!.getCode(), response.body()!!.getMsg())
+                            Result.Error(response.body()?.getCode(), response.body()?.getMsg())
                         }
                     } else {
                         Result.Error(response.code(), response.errorBody().toString())
