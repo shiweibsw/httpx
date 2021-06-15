@@ -5,12 +5,6 @@ import com.hengda.frame.httpx.bean.TestBeanChind
 import com.hengda.frame.httpx.library.BaseHttpManager
 import com.hengda.frame.httpx.library.handle.Result
 import com.hengda.frame.httpx.library.response.ApiResponse
-
-/**
- * @Author shiwei
- * @Date 2021/6/15-9:21
- * @Email shiweibsw@gmail.com
- */
 class HttpManager : BaseHttpManager() {
 
     //==============your code ====================

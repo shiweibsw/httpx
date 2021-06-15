@@ -8,11 +8,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-/**
- * @Author shiwei
- * @Date 2021/4/8-10:00
- * @Email shiweibsw@gmail.com
- */
 interface ApiService {
 
     @GET("goods/get_goods_code")
