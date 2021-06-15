@@ -20,11 +20,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun doTest() {
         GlobalScope.launch {
-            val s = HttpManager.getManager().doTestWithResp()
-            if (s is Result.Success) {
-                Log.i(TAG, "success: ${s.data}")
-            } else if (s is Result.Error) {
-                Log.i(TAG, "error: ${s.code}--msg:${s.msg}")
+            HttpManager.getManager().doTestWithResp().apply {
+                if (this is Result.Success) {
+                    Log.i(TAG, "success: ${this.data}")
+                } else if (this is Result.Error) {
+                    Log.i(TAG, "error: ${this.code}--msg:${this.msg}")
+                }
             }
         }
     }
