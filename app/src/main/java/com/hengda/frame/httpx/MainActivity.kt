@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import com.hengda.frame.httpx.library.handle.Result
+import com.hengda.frame.httpx.library.handle.onError
+import com.hengda.frame.httpx.library.handle.onSuccess
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -17,16 +19,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun doTest() {
-
         GlobalScope.launch {
             HttpManager.getManager().doTestWithResp().apply {
-                if (this is Result.Success) {
-                    Log.i(TAG, "success: ${this.data}")
-                } else if (this is Result.Error) {
-                    Log.i(TAG, "error: ${this.code}--msg:${this.msg}")
+                onSuccess { data ->
+                    Log.i(TAG, "success: $data")
+                }
+                onError { code, msg ->
+                    Log.i(TAG, "error: ${code}--msg:${msg}")
                 }
             }
         }
-
     }
 }
