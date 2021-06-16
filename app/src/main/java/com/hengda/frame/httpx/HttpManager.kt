@@ -14,7 +14,7 @@ class HttpManager : BaseHttpManager() {
     suspend fun doTestWithResp(): Result<TestBeanChind?> = requestWithResp(
         apiService.test1()
     )
-    //==================================
+    //============================================
 
     companion object {
         @Volatile
