@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun doTest() {
+
         GlobalScope.launch {
             HttpManager.getManager().doTestWithResp().apply {
                 if (this is Result.Success) {
@@ -26,5 +27,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
 }

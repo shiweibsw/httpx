@@ -11,9 +11,8 @@ class HttpManager : BaseHttpManager() {
 
     suspend fun doTest(): Result<TestBean?> = request(apiService.test())
 
-    suspend fun doTestWithResp(): Result<TestBeanChind?> = requestWithResp(
-        apiService.test1()
-    )
+    suspend fun doTestWithResp(): Result<TestBeanChind?> = requestWithResp(apiService.test1())
+
     //============================================
 
     companion object {

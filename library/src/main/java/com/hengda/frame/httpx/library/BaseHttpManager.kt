@@ -79,15 +79,11 @@ abstract class BaseHttpManager {
         withContext(Dispatchers.IO) {
             try {
                 val response = deferred.await()
-                if (response.isSuccessful) {
-                    if (response.body() != null) {
-                        if (response.body()?.getCode() == successCode) {
-                            Result.Success(response.body()?.getDatas())
-                        } else {
-                            Result.Error(response.body()?.getCode(), response.body()?.getMsg())
-                        }
+                if (response.isSuccessful && response.body() != null) {
+                    if (response.body()?.getCode() == successCode) {
+                        Result.Success(response.body()?.getDatas())
                     } else {
-                        Result.Error(response.code(), response.errorBody().toString())
+                        Result.Error(response.body()?.getCode(), response.body()?.getMsg())
                     }
                 } else {
                     Result.Error(response.code(), response.errorBody().toString())
