@@ -10,13 +10,12 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.HashMap
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
 
@@ -34,15 +33,19 @@ abstract class BaseHttpManager {
 
     /**
      * set the baseurl
-     * this method must be called before createOkHttpClient
+     * this method must be called before createOkHttpBuilder
+     *
+     * @see createOkHttpBuilder
      */
     fun setBaseUrl(url: String) {
-        baseUrl = url
+        baseUrl = Objects.requireNonNull(url, "baseUrl == null")
     }
 
     /**
      * set the basic success code ,default value is 1
-     * this method must be called before createOkHttpClient
+     * this method must be called before createOkHttpBuilder
+     *
+     * @see createOkHttpBuilder
      */
     fun setSuccessCode(code: Int) {
         successCode = code
@@ -50,7 +53,9 @@ abstract class BaseHttpManager {
 
     /**
      * set the default timeout include connecttimeout,writetimeout,and readtimeout
-     * this method must be called before createOkHttpClient
+     * this method must be called before createOkHttpBuilder
+     *
+     * @see createOkHttpBuilder
      */
     fun setDefaultTimeout(time: Long) {
         if (time <= 0) {
@@ -67,11 +72,14 @@ abstract class BaseHttpManager {
         loggerTag = tag
     }
 
+    /**
+     * Just return the builder not the client.Therefore, we can add other custom interceptors.
+     * Here are two interceptors that have been forced to be added.
+     */
     private fun createOkHttpBuilder(): OkHttpClient.Builder = OkHttpClient.Builder().apply {
         connectTimeout(timeout, TimeUnit.SECONDS)
         writeTimeout(timeout, TimeUnit.SECONDS)
         readTimeout(timeout, TimeUnit.SECONDS)
-        retryOnConnectionFailure(true)
         addInterceptor { chain ->
             val original = chain.request()
             val requestBuilder = original.newBuilder().header("Accept", "application/json")
