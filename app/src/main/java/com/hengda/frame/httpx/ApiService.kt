@@ -11,14 +11,8 @@ import retrofit2.http.Query
 interface ApiService {
 
     @GET("goods/get_goods_code")
-    fun test(
-        @Query("p") p: String = "z",
-        @Query("cabinet_num") cabinet_num: String = "12000108"
-    ): Deferred<Response<TestBean>>
+    fun test(): Deferred<Response<TestBean>>
 
     @GET("goods/get_goods_code")
-    fun test1(
-        @Query("p") p: String = "z",
-        @Query("cabinet_num") cabinet_num: String = "12000108"
-    ): Deferred<Response<ApiResponse<TestBeanChind>>>
+    fun test1(): Deferred<Response<ApiResponse<TestBeanChind>>>
 }

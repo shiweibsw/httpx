@@ -64,7 +64,6 @@ abstract class BaseHttpManager {
         loggerTag = tag
     }
 
-
     private fun createOkHttpBuilder(): OkHttpClient.Builder = OkHttpClient.Builder().apply {
         connectTimeout(timeout, TimeUnit.SECONDS)
         writeTimeout(timeout, TimeUnit.SECONDS)
@@ -78,6 +77,7 @@ abstract class BaseHttpManager {
         }.addInterceptor(HttpLoggingInterceptor { message ->
             Log.i(loggerTag, message)
         }.also { it.level = HttpLoggingInterceptor.Level.BODY })
+
     }
 
     private fun createRetrofit(): Retrofit = Retrofit.Builder().apply {

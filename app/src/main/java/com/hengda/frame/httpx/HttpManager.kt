@@ -5,6 +5,7 @@ import com.hengda.frame.httpx.bean.TestBean
 import com.hengda.frame.httpx.bean.TestBeanChind
 import com.hengda.frame.httpx.library.BaseHttpManager
 import com.hengda.frame.httpx.library.handle.Result
+import com.hengda.frame.httpx.library.interceptor.CommonParameterInterceptor
 import okhttp3.logging.HttpLoggingInterceptor
 
 class HttpManager : BaseHttpManager() {
@@ -34,6 +35,15 @@ class HttpManager : BaseHttpManager() {
             return HttpManager().apply {
                 setSuccessCode(1)
                 setBaseUrl("http://47.93.76.140:8214/api/")
+                /**common parameters**/
+                provideOkHttpBuilder().addInterceptor(
+                    CommonParameterInterceptor(
+                        hashMapOf(
+                            "p" to "z",
+                            "cabinet_num" to "12000108"
+                        )
+                    )
+                )
                 createApiService()
             }
         }
