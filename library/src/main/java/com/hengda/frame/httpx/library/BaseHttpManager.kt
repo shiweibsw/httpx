@@ -16,6 +16,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import kotlin.coroutines.CoroutineContext
 
 abstract class BaseHttpManager {
     private var baseUrl = ""
@@ -87,8 +88,11 @@ abstract class BaseHttpManager {
         addCallAdapterFactory(CoroutineCallAdapterFactory())
     }.build()
 
-    suspend fun <T> request(deferred: Deferred<Response<T>>): Result<T?> =
-        withContext(Dispatchers.IO) {
+    suspend fun <T> request(
+        deferred: Deferred<Response<T>>,
+        dispatcher: CoroutineContext = Dispatchers.IO
+    ): Result<T?> =
+        withContext(dispatcher) {
             try {
                 val response = deferred.await()
                 if (response.isSuccessful) {
@@ -105,8 +109,11 @@ abstract class BaseHttpManager {
             }
         }
 
-    suspend fun <T> requestWithResp(deferred: Deferred<Response<ApiResponse<T>>>): Result<T?> =
-        withContext(Dispatchers.IO) {
+    suspend fun <T> requestWithResp(
+        deferred: Deferred<Response<ApiResponse<T>>>,
+        dispatcher: CoroutineContext = Dispatchers.IO
+    ): Result<T?> =
+        withContext(dispatcher) {
             try {
                 val response = deferred.await()
                 if (response.isSuccessful && response.body() != null) {

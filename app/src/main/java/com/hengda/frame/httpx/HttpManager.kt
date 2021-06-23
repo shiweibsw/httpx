@@ -1,12 +1,10 @@
 package com.hengda.frame.httpx
 
-import android.util.Log
 import com.hengda.frame.httpx.bean.TestBean
 import com.hengda.frame.httpx.bean.TestBeanChind
 import com.hengda.frame.httpx.library.BaseHttpManager
 import com.hengda.frame.httpx.library.handle.Result
 import com.hengda.frame.httpx.library.interceptor.CommonParameterInterceptor
-import okhttp3.logging.HttpLoggingInterceptor
 
 class HttpManager : BaseHttpManager() {
 
