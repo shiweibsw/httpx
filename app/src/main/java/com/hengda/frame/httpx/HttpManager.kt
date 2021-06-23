@@ -1,10 +1,12 @@
 package com.hengda.frame.httpx
 
+import com.hengda.frame.httpx.bean.RepeaterTimerBeanParent
 import com.hengda.frame.httpx.bean.TestBean
 import com.hengda.frame.httpx.bean.TestBeanChind
 import com.hengda.frame.httpx.library.BaseHttpManager
 import com.hengda.frame.httpx.library.handle.Result
 import com.hengda.frame.httpx.library.interceptor.CommonParameterInterceptor
+import com.hengda.frame.httpx.library.interceptor.ExtraBaseUrlInterceptor
 
 class HttpManager : BaseHttpManager() {
 
@@ -13,6 +15,8 @@ class HttpManager : BaseHttpManager() {
     suspend fun doTest(): Result<TestBean?> = request(apiService.test())
 
     suspend fun doTestWithResp(): Result<TestBeanChind?> = requestWithResp(apiService.test1())
+
+    suspend fun doTest2(): Result<RepeaterTimerBeanParent?> = requestWithResp(apiService.test2())
 
 
     //===============Template code=============================
@@ -34,14 +38,20 @@ class HttpManager : BaseHttpManager() {
                 setSuccessCode(1)
                 setBaseUrl("http://47.93.76.140:8214/api/")
                 /**common parameters**/
-                provideOkHttpBuilder().addInterceptor(
-                    CommonParameterInterceptor(
-                        hashMapOf(
-                            "p" to "z",
-                            "cabinet_num" to "12000108"
+                provideOkHttpBuilder()
+                    .addInterceptor(
+                        CommonParameterInterceptor(
+                            hashMapOf(
+                                "p" to "z",
+                                "cabinet_num" to "12000108"
+                            )
+                        )
+                    ).addInterceptor(
+                        ExtraBaseUrlInterceptor(
+                            "publish",
+                            "http://47.93.76.140:8215/api/"
                         )
                     )
-                )
                 createApiService()
             }
         }

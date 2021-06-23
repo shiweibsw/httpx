@@ -19,11 +19,27 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnTest).setOnClickListener {
             doTest()
         }
+        findViewById<Button>(R.id.btnTest1).setOnClickListener {
+            doTest2()
+        }
     }
 
     private fun doTest() {
         httpScope.launch {
             HttpManager.getManager().doTestWithResp().apply {
+                onSuccess { data ->
+                    Log.i(TAG, "success: $data")
+                }
+                onError { code, msg ->
+                    Log.i(TAG, "error: ${code}--msg:${msg}")
+                }
+            }
+        }
+    }
+
+    private fun doTest2() {
+        httpScope.launch {
+            HttpManager.getManager().doTest2().apply {
                 onSuccess { data ->
                     Log.i(TAG, "success: $data")
                 }
