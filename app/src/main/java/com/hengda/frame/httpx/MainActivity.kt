@@ -4,55 +4,23 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import com.hengda.frame.httpx.library.handle.Result
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import com.hengda.frame.httpx.databinding.ActivityMainBinding
+import com.hengda.frame.httpx.http.HttpManager
 import com.hengda.frame.httpx.library.handle.onError
 import com.hengda.frame.httpx.library.handle.onSuccess
+import com.hengda.frame.httpx.viewmodels.MainViewModel
 import kotlinx.coroutines.*
-import java.lang.StringBuilder
 
 class MainActivity : AppCompatActivity() {
-    private val TAG = "MainActivity"
-    private var httpScope = MainScope()
+    private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        findViewById<Button>(R.id.btnTest).setOnClickListener {
-            doTest()
-        }
-        findViewById<Button>(R.id.btnTest1).setOnClickListener {
-            doTest2()
-        }
-    }
-
-    private fun doTest() {
-        httpScope.launch {
-            HttpManager.getManager().doTestWithResp().apply {
-                onSuccess { data ->
-                    Log.i(TAG, "success: $data")
-                }
-                onError { code, msg ->
-                    Log.i(TAG, "error: ${code}--msg:${msg}")
-                }
+        binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+            .apply {
+                viewmodel = viewModel
             }
-        }
     }
-
-    private fun doTest2() {
-        httpScope.launch {
-            HttpManager.getManager().doTest2().apply {
-                onSuccess { data ->
-                    Log.i(TAG, "success: $data")
-                }
-                onError { code, msg ->
-                    Log.i(TAG, "error: ${code}--msg:${msg}")
-                }
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        httpScope.cancel()
-    }
-
 }

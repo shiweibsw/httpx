@@ -1,4 +1,4 @@
-package com.hengda.frame.httpx
+package com.hengda.frame.httpx.http
 
 import com.hengda.frame.httpx.bean.RepeaterTimerBeanParent
 import com.hengda.frame.httpx.bean.TestBean

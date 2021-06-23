@@ -1,4 +1,4 @@
-package com.hengda.frame.httpx
+package com.hengda.frame.httpx.http
 
 import com.hengda.frame.httpx.bean.RepeaterTimerBeanParent
 import com.hengda.frame.httpx.bean.TestBean
@@ -12,11 +12,11 @@ class HttpManager : BaseHttpManager() {
 
     //==============your code ====================
 
-    suspend fun doTest(): Result<TestBean?> = request(apiService.test())
+    suspend fun doWithBaseRequest(): Result<TestBean?> = request(apiService.test())
 
-    suspend fun doTestWithResp(): Result<TestBeanChind?> = requestWithResp(apiService.test1())
+    suspend fun doWithFormatResponse(): Result<TestBeanChind?> = requestWithResp(apiService.test1())
 
-    suspend fun doTest2(): Result<RepeaterTimerBeanParent?> = requestWithResp(apiService.test2())
+    suspend fun doWithExtraBaseUrl(): Result<RepeaterTimerBeanParent?> = requestWithResp(apiService.test2())
 
 
     //===============Template code=============================
