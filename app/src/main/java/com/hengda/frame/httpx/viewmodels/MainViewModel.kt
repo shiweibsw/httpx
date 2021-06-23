@@ -10,11 +10,6 @@ import com.hengda.frame.httpx.library.handle.onError
 import com.hengda.frame.httpx.library.handle.onSuccess
 import kotlinx.coroutines.launch
 
-/**
- * @Author shiwei
- * @Date 2021/6/23-15:01
- * @Email shiweibsw@gmail.com
- */
 class MainViewModel : ViewModel() {
 
     private val _respBody = MutableLiveData<String>()
