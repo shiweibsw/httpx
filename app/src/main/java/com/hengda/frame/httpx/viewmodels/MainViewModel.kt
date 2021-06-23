@@ -1,9 +1,11 @@
 package com.hengda.frame.httpx.viewmodels
 
-import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hengda.frame.httpx.http.HttpManager
+import com.hengda.frame.httpx.library.handle.onDefError
 import com.hengda.frame.httpx.library.handle.onError
 import com.hengda.frame.httpx.library.handle.onSuccess
 import kotlinx.coroutines.launch
@@ -14,16 +16,22 @@ import kotlinx.coroutines.launch
  * @Email shiweibsw@gmail.com
  */
 class MainViewModel : ViewModel() {
-    private val TAG = "MainActivity"
 
+    private val _respBody = MutableLiveData<String>()
+    val respBody: LiveData<String> = _respBody
+
+    private fun setRespBody(content: String) {
+        _respBody.value = content
+    }
+    
     fun doWithBaseRequest() {
         viewModelScope.launch {
             HttpManager.getManager().doWithBaseRequest().apply {
                 onSuccess { data ->
-                    Log.i(TAG, "success: $data")
+                    setRespBody(data.toString())
                 }
-                onError { code, msg ->
-                    Log.i(TAG, "error: ${code}--msg:${msg}")
+                onDefError {
+                    setRespBody("error: ${it.message}")
                 }
             }
         }
@@ -33,10 +41,10 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             HttpManager.getManager().doWithFormatResponse().apply {
                 onSuccess { data ->
-                    Log.i(TAG, "success: $data")
+                    setRespBody(data.toString())
                 }
                 onError { code, msg ->
-                    Log.i(TAG, "error: ${code}--msg:${msg}")
+                    setRespBody("error: ${code}--msg:${msg}")
                 }
             }
         }
@@ -46,10 +54,10 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             HttpManager.getManager().doWithExtraBaseUrl().apply {
                 onSuccess { data ->
-                    Log.i(TAG, "success: $data")
+                    setRespBody(data.toString())
                 }
                 onError { code, msg ->
-                    Log.i(TAG, "error: ${code}--msg:${msg}")
+                    setRespBody("error: ${code}--msg:${msg}")
                 }
             }
         }
