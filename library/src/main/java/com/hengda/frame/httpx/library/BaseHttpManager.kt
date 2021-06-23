@@ -1,6 +1,7 @@
 package com.hengda.frame.httpx.library
 
 import android.util.Log
+import com.hengda.frame.httpx.library.config.DEFAULT_LOGGER_TAG
 import com.hengda.frame.httpx.library.config.DEFAULT_SUCCESS_CODE
 import com.hengda.frame.httpx.library.config.DEFAULT_TIMEOUT
 import com.hengda.frame.httpx.library.handle.Result
@@ -20,10 +21,13 @@ abstract class BaseHttpManager {
     private var baseUrl = ""
     private var successCode = DEFAULT_SUCCESS_CODE
     private var timeout = DEFAULT_TIMEOUT
-    private val mRetrofit by lazy { createRetrofit() }
-    private val okHttpClient by lazy { createOkHttpClient() }
+    private var loggerTag: String = DEFAULT_LOGGER_TAG
+    private val _mRetrofit by lazy { createRetrofit() }
+    private val _okHttpBuilder by lazy { createOkHttpBuilder() }
 
-    fun getRetrofit(): Retrofit = mRetrofit
+    fun provideRetrofit(): Retrofit = _mRetrofit
+
+    fun provideOkHttpBuilder(): OkHttpClient.Builder = _okHttpBuilder
 
     /**
      * set the baseurl
@@ -52,7 +56,16 @@ abstract class BaseHttpManager {
         timeout = time
     }
 
-    private fun createOkHttpClient(): OkHttpClient = OkHttpClient.Builder().apply {
+    /**
+     * set the http logger tag
+     * log interception is enabled by default for all network requests
+     */
+    fun setLoggerTag(tag: String) {
+        loggerTag = tag
+    }
+
+
+    private fun createOkHttpBuilder(): OkHttpClient.Builder = OkHttpClient.Builder().apply {
         connectTimeout(timeout, TimeUnit.SECONDS)
         writeTimeout(timeout, TimeUnit.SECONDS)
         readTimeout(timeout, TimeUnit.SECONDS)
@@ -62,18 +75,14 @@ abstract class BaseHttpManager {
             val requestBuilder = original.newBuilder().header("Accept", "application/json")
             val request = requestBuilder.build()
             chain.proceed(request)
-        }
-        addInterceptor(HttpLoggingInterceptor { message ->
-            Log.i(
-                "HttpManager",
-                message
-            )
+        }.addInterceptor(HttpLoggingInterceptor { message ->
+            Log.i(loggerTag, message)
         }.also { it.level = HttpLoggingInterceptor.Level.BODY })
-    }.build()
+    }
 
     private fun createRetrofit(): Retrofit = Retrofit.Builder().apply {
         baseUrl(baseUrl)
-        client(okHttpClient)
+        client(_okHttpBuilder.build())
         addConverterFactory(GsonConverterFactory.create())
         addCallAdapterFactory(CoroutineCallAdapterFactory())
     }.build()

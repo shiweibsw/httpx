@@ -1,9 +1,11 @@
 package com.hengda.frame.httpx
 
+import android.util.Log
 import com.hengda.frame.httpx.bean.TestBean
 import com.hengda.frame.httpx.bean.TestBeanChind
 import com.hengda.frame.httpx.library.BaseHttpManager
 import com.hengda.frame.httpx.library.handle.Result
+import okhttp3.logging.HttpLoggingInterceptor
 
 class HttpManager : BaseHttpManager() {
 
@@ -29,16 +31,16 @@ class HttpManager : BaseHttpManager() {
         }
 
         private fun buildManager(): HttpManager {
-            var manager = HttpManager()
-            manager.setSuccessCode(1)
-            manager.setBaseUrl("http://47.93.76.140:8214/api/")
-            manager.createApiService()
-            return manager
+            return HttpManager().apply {
+                setSuccessCode(1)
+                setBaseUrl("http://47.93.76.140:8214/api/")
+                createApiService()
+            }
         }
     }
 
     private fun createApiService() {
-        apiService = getRetrofit().create(ApiService::class.java)
+        apiService = provideRetrofit().create(ApiService::class.java)
     }
 
 

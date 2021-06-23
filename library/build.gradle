@@ -46,5 +46,7 @@ dependencies {
     api "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
     api 'com.squareup.okhttp3:logging-interceptor:3.14.7'
     api 'com.google.code.gson:gson:2.8.6'
+    debugImplementation 'com.readystatesoftware.chuck:library:1.0.4'
+    releaseImplementation 'com.readystatesoftware.chuck:library-no-op:1.0.4'
     api "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 }
