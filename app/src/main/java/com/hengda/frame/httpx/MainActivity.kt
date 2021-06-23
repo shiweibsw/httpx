@@ -9,6 +9,7 @@ import com.hengda.frame.httpx.library.handle.onError
 import com.hengda.frame.httpx.library.handle.onSuccess
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.lang.StringBuilder
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"

@@ -13,7 +13,9 @@ class HttpManager : BaseHttpManager() {
 
     suspend fun doTestWithResp(): Result<TestBeanChind?> = requestWithResp(apiService.test1())
 
-    //============================================
+
+    //===============Template code=============================
+    private lateinit var apiService: ApiService
 
     companion object {
         @Volatile
@@ -34,8 +36,6 @@ class HttpManager : BaseHttpManager() {
             return manager
         }
     }
-
-    private lateinit var apiService: ApiService
 
     private fun createApiService() {
         apiService = getRetrofit().create(ApiService::class.java)

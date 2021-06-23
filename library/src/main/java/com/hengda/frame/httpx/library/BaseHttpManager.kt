@@ -1,6 +1,8 @@
 package com.hengda.frame.httpx.library
 
 import android.util.Log
+import com.hengda.frame.httpx.library.config.DEFAULT_SUCCESS_CODE
+import com.hengda.frame.httpx.library.config.DEFAULT_TIMEOUT
 import com.hengda.frame.httpx.library.handle.Result
 import com.hengda.frame.httpx.library.response.ApiResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -16,25 +18,44 @@ import java.util.concurrent.TimeUnit
 
 abstract class BaseHttpManager {
     private var baseUrl = ""
-    private val DEFAULT_TIMEOUT: Long = 10L
+    private var successCode = DEFAULT_SUCCESS_CODE
+    private var timeout = DEFAULT_TIMEOUT
     private val mRetrofit by lazy { createRetrofit() }
     private val okHttpClient by lazy { createOkHttpClient() }
-    private var successCode = 1
 
     fun getRetrofit(): Retrofit = mRetrofit
 
+    /**
+     * set the baseurl
+     * this method must be called before createOkHttpClient
+     */
     fun setBaseUrl(url: String) {
         baseUrl = url
     }
 
+    /**
+     * set the basic success code ,default value is 1
+     * this method must be called before createOkHttpClient
+     */
     fun setSuccessCode(code: Int) {
         successCode = code
     }
 
+    /**
+     * set the default timeout include connecttimeout,writetimeout,and readtimeout
+     * this method must be called before createOkHttpClient
+     */
+    fun setDefaultTimeout(time: Long) {
+        if (time <= 0) {
+            throw IllegalArgumentException("Time must be greater than 0")
+        }
+        timeout = time
+    }
+
     private fun createOkHttpClient(): OkHttpClient = OkHttpClient.Builder().apply {
-        connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-        writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-        readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+        connectTimeout(timeout, TimeUnit.SECONDS)
+        writeTimeout(timeout, TimeUnit.SECONDS)
+        readTimeout(timeout, TimeUnit.SECONDS)
         retryOnConnectionFailure(true)
         addInterceptor { chain ->
             val original = chain.request()
