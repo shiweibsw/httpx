@@ -24,6 +24,9 @@ class MainViewModel : ViewModel() {
         _respBody.value = content
     }
 
+    /**
+     * do not use GlobalScope.launch() .Otherwise, you need to deal with the lifecycle yourself.
+     */
     fun doWithBaseRequest() {
         viewModelScope.launch {
             HttpManager.getManager().doWithBaseRequest().apply {
