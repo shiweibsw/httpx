@@ -23,7 +23,7 @@ class MainViewModel : ViewModel() {
     private fun setRespBody(content: String) {
         _respBody.value = content
     }
-    
+
     fun doWithBaseRequest() {
         viewModelScope.launch {
             HttpManager.getManager().doWithBaseRequest().apply {
