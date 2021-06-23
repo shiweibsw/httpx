@@ -18,7 +18,6 @@ class HttpManager : BaseHttpManager() {
 
     suspend fun doWithExtraBaseUrl(): Result<RepeaterTimerBeanParent?> = requestWithResp(apiService.test2())
 
-
     //===============Template code=============================
     private lateinit var apiService: ApiService
 
@@ -37,7 +36,6 @@ class HttpManager : BaseHttpManager() {
             return HttpManager().apply {
                 setSuccessCode(1)
                 setBaseUrl("http://47.93.76.140:8214/api/")
-                /**common parameters**/
                 provideOkHttpBuilder()
                     .addInterceptor(
                         CommonParameterInterceptor(
