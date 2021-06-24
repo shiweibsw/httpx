@@ -18,7 +18,7 @@ class HttpManager : BaseHttpManager() {
 
     suspend fun doWithExtraBaseUrl(): Result<RepeaterTimerBeanParent?> = requestWithResp(apiService.test2())
 
-    //===============Template code=============================
+    //===============Template code=================
     private lateinit var apiService: ApiService
 
     companion object {
