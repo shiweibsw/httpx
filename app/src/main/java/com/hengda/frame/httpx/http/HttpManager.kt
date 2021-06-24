@@ -34,8 +34,8 @@ class HttpManager : BaseHttpManager() {
 
         private fun buildManager(): HttpManager {
             return HttpManager().apply {
-                setSuccessCode(1)
                 setBaseUrl("http://47.93.76.140:8214/api/")
+                setSuccessCode(1)
                 provideOkHttpBuilder()
                     .addInterceptor(
                         CommonParameterInterceptor(
