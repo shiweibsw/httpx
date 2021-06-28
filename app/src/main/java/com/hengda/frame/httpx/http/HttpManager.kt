@@ -14,9 +14,10 @@ class HttpManager : BaseHttpManager() {
 
     suspend fun doWithBaseRequest(): Result<TestBean?> = request(apiService.test())
 
-    suspend fun doWithFormatResponse(): Result<TestBeanChind?> = requestWithResp(apiService.test1())
+    suspend fun doWithFormatResponse(): Result<TestBeanChind?> = requestFormat(apiService.test1())
 
-    suspend fun doWithExtraBaseUrl(): Result<RepeaterTimerBeanParent?> = requestWithResp(apiService.test2())
+    suspend fun doWithExtraBaseUrl(onLoading: (isLoading: Boolean) -> Unit): Result<RepeaterTimerBeanParent?> =
+        requestFormatWithLoading(apiService.test2(), onLoading)
 
     //===============Template code=================
     private lateinit var apiService: ApiService

@@ -9,6 +9,7 @@ import com.hengda.frame.httpx.library.response.ApiResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -119,7 +120,7 @@ abstract class BaseHttpManager {
             }
         }
 
-    suspend fun <T> requestWithResp(
+    suspend fun <T> requestFormat(
         deferred: Deferred<Response<ApiResponse<T>>>,
         dispatcher: CoroutineContext = Dispatchers.IO
     ): Result<T?> =
@@ -137,6 +138,31 @@ abstract class BaseHttpManager {
                 }
             } catch (e: Exception) {
                 Result.Error(-1, e.message.toString())
+            }
+        }
+
+    suspend fun <T> requestFormatWithLoading(
+        deferred: Deferred<Response<ApiResponse<T>>>,
+        onLoading: (isLoading: Boolean) -> Unit,
+        dispatcher: CoroutineContext = Dispatchers.IO
+    ): Result<T?> =
+        withContext(dispatcher) {
+            try {
+                withContext(Dispatchers.Main) { onLoading(true) }
+                val response = deferred.await()
+                if (response.isSuccessful && response.body() != null) {
+                    if (response.body()?.getCode() == successCode) {
+                        Result.Success(response.body()?.getDatas())
+                    } else {
+                        Result.Error(response.body()?.getCode(), response.body()?.getMsg())
+                    }
+                } else {
+                    Result.Error(response.code(), response.errorBody().toString())
+                }
+            } catch (e: Exception) {
+                Result.Error(-1, e.message.toString())
+            } finally {
+                withContext(Dispatchers.Main) { onLoading(false) }
             }
         }
 }

@@ -15,6 +15,9 @@ class MainViewModel : ViewModel() {
     private val _respBody = MutableLiveData<String>()
     val respBody: LiveData<String> = _respBody
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     private fun setRespBody(content: String) {
         _respBody.value = content
     }
@@ -50,7 +53,7 @@ class MainViewModel : ViewModel() {
 
     fun doWithExtraBaseUrl() {
         viewModelScope.launch {
-            HttpManager.getManager().doWithExtraBaseUrl().apply {
+            HttpManager.getManager().doWithExtraBaseUrl { _isLoading.value = it }.apply {
                 onSuccess { data ->
                     setRespBody(data.toString())
                 }
