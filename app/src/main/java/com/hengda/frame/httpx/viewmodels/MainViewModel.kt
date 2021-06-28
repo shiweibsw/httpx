@@ -1,5 +1,6 @@
 package com.hengda.frame.httpx.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,7 +24,7 @@ class MainViewModel : ViewModel() {
     }
 
     /**
-     * do not use GlobalScope.launch() .Otherwise, you need to deal with the lifecycle yourself.
+     * Do not use GlobalScope.launch() .Otherwise, you need to deal with the lifecycle yourself.
      */
     fun doWithBaseRequest() {
         viewModelScope.launch {

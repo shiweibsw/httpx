@@ -100,69 +100,60 @@ abstract class BaseHttpManager {
     }.build()
 
     suspend fun <T> request(
-        deferred: Deferred<Response<T>>,
-        dispatcher: CoroutineContext = Dispatchers.IO
+        deferred: Deferred<Response<T>>
     ): Result<T?> =
-        withContext(dispatcher) {
-            try {
-                val response = deferred.await()
-                if (response.isSuccessful) {
-                    if (response.body() != null) {
-                        Result.Success(response.body())
-                    } else {
-                        Result.DefError(java.lang.Exception(response.errorBody().toString()))
-                    }
+        try {
+            val response = deferred.await()
+            if (response.isSuccessful) {
+                if (response.body() != null) {
+                    Result.Success(response.body())
                 } else {
                     Result.DefError(java.lang.Exception(response.errorBody().toString()))
                 }
-            } catch (e: Exception) {
-                Result.DefError(e)
+            } else {
+                Result.DefError(java.lang.Exception(response.errorBody().toString()))
             }
+        } catch (e: Exception) {
+            Result.DefError(e)
         }
 
     suspend fun <T> requestFormat(
-        deferred: Deferred<Response<ApiResponse<T>>>,
-        dispatcher: CoroutineContext = Dispatchers.IO
+        deferred: Deferred<Response<ApiResponse<T>>>
     ): Result<T?> =
-        withContext(dispatcher) {
-            try {
-                val response = deferred.await()
-                if (response.isSuccessful && response.body() != null) {
-                    if (response.body()?.getCode() == successCode) {
-                        Result.Success(response.body()?.getDatas())
-                    } else {
-                        Result.Error(response.body()?.getCode(), response.body()?.getMsg())
-                    }
+        try {
+            val response = deferred.await()
+            if (response.isSuccessful && response.body() != null) {
+                if (response.body()?.getCode() == successCode) {
+                    Result.Success(response.body()?.getDatas())
                 } else {
-                    Result.Error(response.code(), response.errorBody().toString())
+                    Result.Error(response.body()?.getCode(), response.body()?.getMsg())
                 }
-            } catch (e: Exception) {
-                Result.Error(-1, e.message.toString())
+            } else {
+                Result.Error(response.code(), response.errorBody().toString())
             }
+        } catch (e: Exception) {
+            Result.Error(-1, e.message.toString())
         }
 
     suspend fun <T> requestFormatWithLoading(
         deferred: Deferred<Response<ApiResponse<T>>>,
-        onLoading: (isLoading: Boolean) -> Unit,
-        dispatcher: CoroutineContext = Dispatchers.IO
+        onLoading: (isLoading: Boolean) -> Unit
     ): Result<T?> =
-        withContext(dispatcher) {
-            try {
-                withContext(Dispatchers.Main) { onLoading(true) }
-                val response = deferred.await()
-                if (response.isSuccessful && response.body() != null) {
-                    if (response.body()?.getCode() == successCode) {
-                        Result.Success(response.body()?.getDatas())
-                    } else {
-                        Result.Error(response.body()?.getCode(), response.body()?.getMsg())
-                    }
+        try {
+            onLoading(true)
+            val response = deferred.await()
+            if (response.isSuccessful && response.body() != null) {
+                if (response.body()?.getCode() == successCode) {
+                    Result.Success(response.body()?.getDatas())
                 } else {
-                    Result.Error(response.code(), response.errorBody().toString())
+                    Result.Error(response.body()?.getCode(), response.body()?.getMsg())
                 }
-            } catch (e: Exception) {
-                Result.Error(-1, e.message.toString())
-            } finally {
-                withContext(Dispatchers.Main) { onLoading(false) }
+            } else {
+                Result.Error(response.code(), response.errorBody().toString())
             }
+        } catch (e: Exception) {
+            Result.Error(-1, e.message.toString())
+        } finally {
+            onLoading(false)
         }
 }
