@@ -10,7 +10,7 @@ import com.hengda.frame.httpx.library.interceptor.ExtraBaseUrlInterceptor
 
 class HttpManager : BaseHttpManager() {
 
-    //==============your code ====================
+    //==============your codes ====================
 
     suspend fun doWithBaseRequest(): Result<TestBean?> = request(apiService.test())
 
@@ -19,7 +19,7 @@ class HttpManager : BaseHttpManager() {
     suspend fun doWithExtraBaseUrl(onLoading: (isLoading: Boolean) -> Unit): Result<RepeaterTimerBeanParent?> =
         requestFormatWithLoading(apiService.test2(), onLoading)
 
-    //===============Template code=================
+    //===============Template codes=================
     private lateinit var apiService: ApiService
 
     companion object {

@@ -8,9 +8,6 @@ import com.hengda.frame.httpx.library.handle.Result
 import com.hengda.frame.httpx.library.response.ApiResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -18,7 +15,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.coroutines.CoroutineContext
 
 abstract class BaseHttpManager {
     private var baseUrl = ""
@@ -101,8 +97,18 @@ abstract class BaseHttpManager {
 
     suspend fun <T> request(
         deferred: Deferred<Response<T>>
+    ): Result<T?> = requestWithLoading(deferred) {}
+
+    suspend fun <T> requestFormat(
+        deferred: Deferred<Response<ApiResponse<T>>>
+    ): Result<T?> = requestFormatWithLoading(deferred) {}
+
+    suspend fun <T> requestWithLoading(
+        deferred: Deferred<Response<T>>,
+        onLoading: (isLoading: Boolean) -> Unit
     ): Result<T?> =
         try {
+            onLoading(true)
             val response = deferred.await()
             if (response.isSuccessful) {
                 if (response.body() != null) {
@@ -115,24 +121,8 @@ abstract class BaseHttpManager {
             }
         } catch (e: Exception) {
             Result.DefError(e)
-        }
-
-    suspend fun <T> requestFormat(
-        deferred: Deferred<Response<ApiResponse<T>>>
-    ): Result<T?> =
-        try {
-            val response = deferred.await()
-            if (response.isSuccessful && response.body() != null) {
-                if (response.body()?.getCode() == successCode) {
-                    Result.Success(response.body()?.getDatas())
-                } else {
-                    Result.Error(response.body()?.getCode(), response.body()?.getMsg())
-                }
-            } else {
-                Result.Error(response.code(), response.errorBody().toString())
-            }
-        } catch (e: Exception) {
-            Result.Error(-1, e.message.toString())
+        } finally {
+            onLoading(false)
         }
 
     suspend fun <T> requestFormatWithLoading(
