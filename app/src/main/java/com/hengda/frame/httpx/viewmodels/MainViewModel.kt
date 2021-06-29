@@ -34,9 +34,6 @@ class MainViewModel : ViewModel() {
             HttpManager.getManager().doWithBaseRequest()
                 .observe(viewLifecycleOwner, Observer {
                     it.apply {
-                        onLoading {
-                            _isLoading.value = it
-                        }
                         onSuccess { data ->
                             setRespBody(data.toString())
                         }
@@ -67,6 +64,9 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             HttpManager.getManager().doWithExtraBaseUrl().observe(viewLifecycleOwner, Observer {
                 it.apply {
+                    onLoading {
+                        _isLoading.value = it
+                    }
                     onSuccess { data ->
                         setRespBody(data.toString())
                     }

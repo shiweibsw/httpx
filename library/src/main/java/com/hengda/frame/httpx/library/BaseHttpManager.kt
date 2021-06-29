@@ -13,6 +13,7 @@ import com.hengda.frame.httpx.library.response.ApiResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -100,7 +101,7 @@ abstract class BaseHttpManager {
         addCallAdapterFactory(CoroutineCallAdapterFactory())
     }.build()
 
-    suspend fun <T> flowRequest(response: T): LiveData<Result<T>> =
+    suspend fun <T> flowRequest(response: T): LiveData<Result<T>> = liveData {
         flow {
             try {
                 emit(Result.Success(response))
@@ -111,10 +112,10 @@ abstract class BaseHttpManager {
             emit(Result.Loading(true))
         }.onCompletion {
             emit(Result.Loading(false))
-        }.asLiveData()
+        }.collectLatest { emit(it) }
+    }
 
-
-    suspend fun <T> flowRequest(response: ApiResponse<T>): LiveData<Result<T?>> =
+    suspend fun <T> flowRequest(response: ApiResponse<T>): LiveData<Result<T?>> = liveData {
         flow {
             try {
                 if (response.getCode() == successCode) {
@@ -129,5 +130,7 @@ abstract class BaseHttpManager {
             emit(Result.Loading(true))
         }.onCompletion {
             emit(Result.Loading(false))
-        }.asLiveData()
+        }.collectLatest { emit(it) }
+    }
+
 }
