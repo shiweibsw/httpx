@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.setLifecycleOwner(this)
         DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
             .apply {
                 viewmodel = viewModel

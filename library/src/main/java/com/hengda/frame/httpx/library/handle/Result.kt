@@ -1,13 +1,19 @@
 package com.hengda.frame.httpx.library.handle
 
-import java.lang.Exception
+import kotlin.Exception
 
 sealed class Result<out R> {
 
     data class Success<out T>(val data: T) : Result<T>()
     data class Error(val code: Int?, val msg: String?) : Result<Nothing>()
     data class DefError(val exception: Exception) : Result<Nothing>()
-//    object Loading : Result<Nothing>()
+    data class Loading(val isLoading: Boolean) : Result<Nothing>()
+}
+
+inline fun <reified T> Result<T>.onLoading(loading: (isLoading: Boolean) -> Unit) {
+    if (this is Result.Loading) {
+        loading(isLoading)
+    }
 }
 
 inline fun <reified T> Result<T>.onSuccess(success: (T) -> Unit) {
