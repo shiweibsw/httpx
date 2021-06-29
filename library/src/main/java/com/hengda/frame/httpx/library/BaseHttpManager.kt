@@ -8,10 +8,10 @@ import com.hengda.frame.httpx.library.config.DEFAULT_SUCCESS_CODE
 import com.hengda.frame.httpx.library.config.DEFAULT_TIMEOUT
 import com.hengda.frame.httpx.library.handle.Result
 import com.hengda.frame.httpx.library.response.ApiResponse
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -89,13 +89,13 @@ abstract class BaseHttpManager {
         }.addInterceptor(HttpLoggingInterceptor { message ->
             Log.i(loggerTag, message)
         }.also { it.level = HttpLoggingInterceptor.Level.BODY })
-
     }
 
     private fun createRetrofit(): Retrofit = Retrofit.Builder().apply {
         baseUrl(baseUrl)
         client(_okHttpBuilder.build())
         addConverterFactory(GsonConverterFactory.create())
+        addCallAdapterFactory(CoroutineCallAdapterFactory())
     }.build()
 
     suspend fun <T> flowRequest(response: T): LiveData<Result<T>> = liveData {
@@ -117,10 +117,14 @@ abstract class BaseHttpManager {
 
     suspend fun <T> flowRequest(response: ApiResponse<T>): LiveData<Result<T?>> = liveData {
         flow {
-            if (response.getCode() == successCode) {
-                emit(Result.Success(response.getDatas()))
-            } else {
-                emit(Result.Error(response.getCode(), response.getMsg()))
+            try {
+                if (response.getCode() == successCode) {
+                    emit(Result.Success(response.getDatas()))
+                } else {
+                    emit(Result.Error(response.getCode(), response.getMsg()))
+                }
+            } catch (e: Exception) {
+                emit(Result.Error(-1, response.getMsg()))
             }
         }.onStart {
             emit(Result.Loading(true))

@@ -5,6 +5,7 @@ import com.hengda.frame.httpx.bean.TestBean
 import com.hengda.frame.httpx.bean.TestBeanChind
 import com.hengda.frame.httpx.library.config.DOMAIN
 import com.hengda.frame.httpx.library.response.ApiResponse
+import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 import retrofit2.http.Headers
 
