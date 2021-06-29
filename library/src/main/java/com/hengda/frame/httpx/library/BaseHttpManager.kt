@@ -134,6 +134,7 @@ abstract class BaseHttpManager {
             val response = deferred.await()
             if (response.isSuccessful && response.body() != null) {
                 if (response.body()?.getCode() == successCode) {
+                    Log.i("==========", "requestFormatWithLoading: ${response.raw().request().url()}")
                     Result.Success(response.body()?.getDatas())
                 } else {
                     Result.Error(response.body()?.getCode(), response.body()?.getMsg())
