@@ -1,8 +1,7 @@
 package com.hengda.frame.httpx.http
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
+import androidx.lifecycle.asLiveData
 import com.hengda.frame.httpx.bean.RepeaterTimerBeanParent
 import com.hengda.frame.httpx.bean.TestBean
 import com.hengda.frame.httpx.bean.TestBeanChind
@@ -10,25 +9,32 @@ import com.hengda.frame.httpx.library.BaseHttpManager
 import com.hengda.frame.httpx.library.handle.Result
 import com.hengda.frame.httpx.library.interceptor.CommonParameterInterceptor
 import com.hengda.frame.httpx.library.interceptor.ExtraBaseUrlInterceptor
+import kotlinx.coroutines.flow.flow
 
 class HttpManager : BaseHttpManager() {
-    private val TAG = "HttpManager"
 
     //==============your codes ====================
 
     suspend fun doWithBaseRequest(): LiveData<Result<TestBean>> =
         try {
             flowRequest(apiService.test())
-        } catch (e: Exception) {
-            Log.i(TAG, "doWithBaseRequest: ${e.message}")
-            liveData { }
+        } catch (e: Throwable) {
+            flow { emit(Result.DefError(e)) }.asLiveData()
         }
 
     suspend fun doWithFormatResponse(): LiveData<Result<TestBeanChind?>> =
-        flowRequest(apiService.test1())
+        try {
+            flowRequest(apiService.test1())
+        } catch (e: Throwable) {
+            flow { emit(Result.Error(-1, e.message)) }.asLiveData()
+        }
 
     suspend fun doWithExtraBaseUrl(): LiveData<Result<RepeaterTimerBeanParent?>> =
-        flowRequest(apiService.test2())
+        try {
+            flowRequest(apiService.test2())
+        } catch (e: Throwable) {
+            flow { emit(Result.Error(-1, e.message)) }.asLiveData()
+        }
 
     //===============Template codes=================
 

@@ -28,7 +28,7 @@ inline fun <reified T> Result<T>.onError(error: (Int?, String?) -> Unit) {
     }
 }
 
-inline fun <reified T> Result<T>.onDefError(error: (Exception) -> Unit) {
+inline fun <reified T> Result<T>.onDefError(error: (Throwable) -> Unit) {
     if (this is Result.DefError) {
         error(exception)
     }

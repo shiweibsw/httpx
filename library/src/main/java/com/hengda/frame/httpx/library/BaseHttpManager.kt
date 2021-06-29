@@ -2,11 +2,13 @@ package com.hengda.frame.httpx.library
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import com.hengda.frame.httpx.library.config.DEFAULT_LOGGER_TAG
 import com.hengda.frame.httpx.library.config.DEFAULT_SUCCESS_CODE
 import com.hengda.frame.httpx.library.config.DEFAULT_TIMEOUT
 import com.hengda.frame.httpx.library.handle.Result
+import com.hengda.frame.httpx.library.handle.onSuccess
 import com.hengda.frame.httpx.library.response.ApiResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
@@ -98,7 +100,7 @@ abstract class BaseHttpManager {
         addCallAdapterFactory(CoroutineCallAdapterFactory())
     }.build()
 
-    suspend fun <T> flowRequest(response: T): LiveData<Result<T>> = liveData {
+    suspend fun <T> flowRequest(response: T): LiveData<Result<T>> =
         flow {
             try {
                 emit(Result.Success(response))
@@ -109,13 +111,10 @@ abstract class BaseHttpManager {
             emit(Result.Loading(true))
         }.onCompletion {
             emit(Result.Loading(false))
-        }.collectLatest {
-            emit(it)
-        }
-    }
+        }.asLiveData()
 
 
-    suspend fun <T> flowRequest(response: ApiResponse<T>): LiveData<Result<T?>> = liveData {
+    suspend fun <T> flowRequest(response: ApiResponse<T>): LiveData<Result<T?>> =
         flow {
             try {
                 if (response.getCode() == successCode) {
@@ -130,8 +129,5 @@ abstract class BaseHttpManager {
             emit(Result.Loading(true))
         }.onCompletion {
             emit(Result.Loading(false))
-        }.collectLatest {
-            emit(it)
-        }
-    }
+        }.asLiveData()
 }
