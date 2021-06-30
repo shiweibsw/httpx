@@ -23,7 +23,6 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 abstract class BaseHttpManager {
-    private val TAG = "BaseHttpManager"
     private var baseUrl = ""
     private var successCode = DEFAULT_SUCCESS_CODE
     private var timeout = DEFAULT_TIMEOUT
@@ -98,18 +97,15 @@ abstract class BaseHttpManager {
         baseUrl(baseUrl)
         client(_okHttpBuilder.build())
         addConverterFactory(GsonConverterFactory.create())
-        addCallAdapterFactory(CoroutineCallAdapterFactory())
     }.build()
 
     suspend fun <T> flowRequest(response: T): LiveData<Result<T>> = liveData {
         flow {
-            try {
-                emit(Result.Success(response))
-            } catch (e: Exception) {
-                emit(Result.DefError(e))
-            }
+            emit(Result.Success(response))
         }.onStart {
             emit(Result.Loading(true))
+        }.catch {
+            emit(Result.DefError(it))
         }.onCompletion {
             emit(Result.Loading(false))
         }.collectLatest { emit(it) }
@@ -117,17 +113,15 @@ abstract class BaseHttpManager {
 
     suspend fun <T> flowRequest(response: ApiResponse<T>): LiveData<Result<T?>> = liveData {
         flow {
-            try {
-                if (response.getCode() == successCode) {
-                    emit(Result.Success(response.getDatas()))
-                } else {
-                    emit(Result.Error(response.getCode(), response.getMsg()))
-                }
-            } catch (e: Exception) {
-                emit(Result.Error(-1, response.getMsg()))
+            if (response.getCode() == successCode) {
+                emit(Result.Success(response.getDatas()))
+            } else {
+                emit(Result.Error(response.getCode(), response.getMsg()))
             }
         }.onStart {
             emit(Result.Loading(true))
+        }.catch {
+            emit(Result.Error(-1, it.message))
         }.onCompletion {
             emit(Result.Loading(false))
         }.collectLatest { emit(it) }

@@ -1,7 +1,5 @@
 package com.hengda.frame.httpx.library.handle
 
-import kotlin.Exception
-
 sealed class Result<out R> {
 
     data class Success<out T>(val data: T) : Result<T>()
