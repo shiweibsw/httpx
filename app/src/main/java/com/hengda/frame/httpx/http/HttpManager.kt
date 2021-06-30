@@ -19,7 +19,6 @@ class HttpManager : BaseHttpManager() {
         try {
             flowRequest(apiService.test())
         } catch (e: Throwable) {
-
             flow { emit(Result.DefError(e)) }.asLiveData()
         }
 
