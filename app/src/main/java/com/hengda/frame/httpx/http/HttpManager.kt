@@ -2,9 +2,9 @@ package com.hengda.frame.httpx.http
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
-import com.hengda.frame.httpx.bean.RepeaterTimerBeanParent
 import com.hengda.frame.httpx.bean.TestBean
 import com.hengda.frame.httpx.bean.TestBeanChind
+import com.hengda.frame.httpx.bean.WeatherInfo
 import com.hengda.frame.httpx.library.BaseHttpManager
 import com.hengda.frame.httpx.library.handle.Result
 import com.hengda.frame.httpx.library.interceptor.CommonParameterInterceptor
@@ -29,7 +29,7 @@ class HttpManager : BaseHttpManager() {
             flow { emit(Result.Error(-1, e.message)) }.asLiveData()
         }
 
-    suspend fun doWithExtraBaseUrl(): LiveData<Result<RepeaterTimerBeanParent?>> =
+    suspend fun doWithExtraBaseUrl(): LiveData<Result<WeatherInfo?>> =
         try {
             flowRequest(apiService.test2())
         } catch (e: Throwable) {
@@ -54,20 +54,19 @@ class HttpManager : BaseHttpManager() {
 
         private fun buildManager(): HttpManager {
             return HttpManager().apply {
-                setBaseUrl("http://47.93.76.140:8214/api/")
-                setSuccessCode(1)
+                setBaseUrl("http://rap2api.taobao.org/")
+                setSuccessCode((200))
                 provideOkHttpBuilder()
                     .addInterceptor(
                         CommonParameterInterceptor(
                             hashMapOf(
-                                "p" to "z",
-                                "cabinet_num" to "12000108"
+                                "platform" to "android"
                             )
                         )
                     ).addInterceptor(
                         ExtraBaseUrlInterceptor(
-                            "publish",
-                            "http://47.93.76.140:8215/api/"
+                            "weather_api",
+                            "https://api.muxiaoguo.cn/"
                         )
                     )
                 createApiService()

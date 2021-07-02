@@ -2,12 +2,16 @@ package com.hengda.frame.httpx.bean
 
 data class TestBean(var status: Int, var msg: String, var data: TestBeanChind)
 
-data class TestBeanChind(var code_path: String)
+data class TestBeanChind(var result: String)
 
-data class RepeaterTimerBeanParent(var channel_list: List<RepeaterTimerBean>)
-
-data class RepeaterTimerBean(
-    var channel_num: Int,
-    var open_time: String,
-    var close_time: String
+data class WeatherInfo(
+    val cityname: String,
+    val temp: String,
+    val WD: String,
+    val WS: String,
+    val wse: String,
+    val SD: String,
+    val weather: String,
+    val pm25: String,
+    val time: String
 )
