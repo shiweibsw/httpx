@@ -2,18 +2,12 @@ package com.hengda.frame.httpx.library
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import com.hengda.frame.httpx.library.config.DEFAULT_LOGGER_TAG
 import com.hengda.frame.httpx.library.config.DEFAULT_SUCCESS_CODE
 import com.hengda.frame.httpx.library.config.DEFAULT_TIMEOUT
 import com.hengda.frame.httpx.library.handle.Result
-import com.hengda.frame.httpx.library.handle.onSuccess
 import com.hengda.frame.httpx.library.response.ApiResponse
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
