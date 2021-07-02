@@ -5,6 +5,7 @@ import com.hengda.frame.httpx.bean.TestBeanChind
 import com.hengda.frame.httpx.bean.WeatherInfo
 import com.hengda.frame.httpx.library.BaseHttpManager
 import com.hengda.frame.httpx.library.handle.Result
+import com.hengda.frame.httpx.library.interceptor.CommonParameterInterceptor
 import com.hengda.frame.httpx.library.interceptor.ExtraBaseUrlInterceptor
 
 class HttpManager : BaseHttpManager() {
@@ -38,9 +39,16 @@ class HttpManager : BaseHttpManager() {
                 setSuccessCode(200)
                 provideOkHttpBuilder()
                     .addInterceptor(
+                        CommonParameterInterceptor(
+                            hashMapOf(
+                                "platform" to "android"
+                            )
+                        )
+                    )
+                    .addInterceptor(
                         ExtraBaseUrlInterceptor(
                             "tianqi",
-                            "https://api.muxiaoguo.cn"
+                            "https://api.muxiaoguo.cn/"
                         )
                     )
                 createApiService()
