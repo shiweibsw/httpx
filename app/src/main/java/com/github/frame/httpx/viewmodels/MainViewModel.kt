@@ -1,11 +1,11 @@
-package com.hengda.frame.httpx.viewmodels
+package com.github.frame.httpx.viewmodels
 
 import androidx.lifecycle.*
-import com.hengda.frame.httpx.http.HttpManager
-import com.hengda.frame.httpx.library.handle.onDefError
-import com.hengda.frame.httpx.library.handle.onError
-import com.hengda.frame.httpx.library.handle.onLoading
-import com.hengda.frame.httpx.library.handle.onSuccess
+import com.github.frame.httpx.http.HttpManager
+import com.github.frame.httpx.library.handle.onDefError
+import com.github.frame.httpx.library.handle.onError
+import com.github.frame.httpx.library.handle.onLoading
+import com.github.frame.httpx.library.handle.onSuccess
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {

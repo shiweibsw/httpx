@@ -1,10 +1,10 @@
-package com.hengda.frame.httpx.http
+package com.github.frame.httpx.http
 
-import com.hengda.frame.httpx.bean.TestBean
-import com.hengda.frame.httpx.bean.TestBeanChind
-import com.hengda.frame.httpx.bean.WeatherInfo
-import com.hengda.frame.httpx.library.config.DOMAIN
-import com.hengda.frame.httpx.library.response.ApiResponse
+import com.github.frame.httpx.bean.TestBean
+import com.github.frame.httpx.bean.TestBeanChind
+import com.github.frame.httpx.bean.WeatherInfo
+import com.github.frame.httpx.library.config.DOMAIN
+import com.github.frame.httpx.library.response.ApiResponse
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query

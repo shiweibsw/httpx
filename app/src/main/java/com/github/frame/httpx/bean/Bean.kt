@@ -1,4 +1,4 @@
-package com.hengda.frame.httpx.bean
+package com.github.frame.httpx.bean
 
 data class TestBean(var status: Int, var msg: String, var data: TestBeanChind)
 

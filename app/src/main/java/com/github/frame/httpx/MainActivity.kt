@@ -1,16 +1,11 @@
-package com.hengda.frame.httpx
+package com.github.frame.httpx
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.hengda.frame.httpx.databinding.ActivityMainBinding
-import com.hengda.frame.httpx.http.HttpManager
-import com.hengda.frame.httpx.library.handle.onError
-import com.hengda.frame.httpx.library.handle.onSuccess
-import com.hengda.frame.httpx.viewmodels.MainViewModel
+import com.github.frame.httpx.databinding.ActivityMainBinding
+import com.github.frame.httpx.viewmodels.MainViewModel
 import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {

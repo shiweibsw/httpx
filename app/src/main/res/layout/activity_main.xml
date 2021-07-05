@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="com.hengda.frame.httpx.viewmodels.MainViewModel" />
+            type="com.github.frame.httpx.viewmodels.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

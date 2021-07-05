@@ -1,14 +1,14 @@
-package com.hengda.frame.httpx.http
+package com.github.frame.httpx.http
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
-import com.hengda.frame.httpx.bean.TestBean
-import com.hengda.frame.httpx.bean.TestBeanChind
-import com.hengda.frame.httpx.bean.WeatherInfo
-import com.hengda.frame.httpx.library.BaseHttpManager
-import com.hengda.frame.httpx.library.handle.Result
-import com.hengda.frame.httpx.library.interceptor.CommonParameterInterceptor
-import com.hengda.frame.httpx.library.interceptor.ExtraBaseUrlInterceptor
+import com.github.frame.httpx.bean.TestBean
+import com.github.frame.httpx.bean.TestBeanChind
+import com.github.frame.httpx.bean.WeatherInfo
+import com.github.frame.httpx.library.BaseHttpManager
+import com.github.frame.httpx.library.handle.Result
+import com.github.frame.httpx.library.interceptor.CommonParameterInterceptor
+import com.github.frame.httpx.library.interceptor.ExtraBaseUrlInterceptor
 import kotlinx.coroutines.flow.flow
 
 class HttpManager : BaseHttpManager() {
