@@ -4,6 +4,8 @@ data class TestBean(var status: Int, var msg: String, var data: TestBeanChind)
 
 data class TestBeanChind(var result: String)
 
+data class PagingBean(var content: String)
+
 data class WeatherInfo(
     val cityname: String,
     val temp: String,

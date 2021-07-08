@@ -1,5 +1,6 @@
 package com.github.frame.httpx.http
 
+import com.github.frame.httpx.bean.PagingBean
 import com.github.frame.httpx.bean.TestBean
 import com.github.frame.httpx.bean.TestBeanChind
 import com.github.frame.httpx.bean.WeatherInfo
@@ -18,6 +19,8 @@ class HttpManager : BaseHttpManager() {
 
     suspend fun doWithExtraBaseUrl(onLoading: (isLoading: Boolean) -> Unit): Result<WeatherInfo?> =
         requestFormatWithLoading(apiService.test2(), onLoading)
+
+    suspend fun pagingTest(): Result<List<PagingBean>?> = requestFormat(apiService.test3())
 
     //===============Template codes=================
     private lateinit var apiService: ApiService

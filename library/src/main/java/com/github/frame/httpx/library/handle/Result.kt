@@ -1,5 +1,7 @@
 package com.github.frame.httpx.library.handle
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 sealed class Result<out R> {
@@ -10,20 +12,29 @@ sealed class Result<out R> {
 //    object Loading : Result<Nothing>()
 }
 
-inline fun <reified T> Result<T>.onSuccess(success: (T) -> Unit) {
-    if (this is Result.Success) {
-        success(data)
+suspend fun <T> Result<T>.onSuccess(success: (T) -> Unit) {
+    val _this = this
+    withContext(Dispatchers.Main) {
+        if (_this is Result.Success) {
+            success(_this.data)
+        }
     }
 }
 
-inline fun <reified T> Result<T>.onError(error: (Int?, String?) -> Unit) {
-    if (this is Result.Error) {
-        error(code, msg)
+suspend fun <T> Result<T>.onError(error: (Int?, String?) -> Unit) {
+    val _this = this
+    withContext(Dispatchers.Main) {
+        if (_this is Result.Error) {
+            error(_this.code, _this.msg)
+        }
     }
 }
 
-inline fun <reified T> Result<T>.onDefError(error: (Exception) -> Unit) {
-    if (this is Result.DefError) {
-        error(exception)
+suspend fun <T> Result<T>.onDefError(error: (Throwable) -> Unit) {
+    val _this = this
+    withContext(Dispatchers.Main) {
+        if (_this is Result.DefError) {
+            error(_this.exception)
+        }
     }
 }

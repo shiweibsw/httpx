@@ -1,5 +1,6 @@
 package com.github.frame.httpx.http
 
+import com.github.frame.httpx.bean.PagingBean
 import com.github.frame.httpx.bean.TestBean
 import com.github.frame.httpx.bean.TestBeanChind
 import com.github.frame.httpx.bean.WeatherInfo
@@ -25,4 +26,7 @@ interface ApiService {
         @Query("city") city: String = "长沙",
         @Query("type") type: Int = 1
     ): Deferred<Response<ApiResponse<WeatherInfo>>>
+
+    @GET("app/mock/255859/jetpack_paging")
+    fun test3(): Deferred<Response<ApiResponse<List<PagingBean>>>>
 }
