@@ -13,9 +13,14 @@ master分支为普通协程版本, flow 分支为flow版本。
 
 #### 使用方式
 
+```
+ implementation 'io.github.shiwebsw:httpx:1.0.0'
+ 
+```
+
 ##### 普通协程版
 
-首先你要有一个ApiService 里边定义好接口就像这样
+定义一个ApiService， 里边定义好接口就像这样
 
 ```
 interface ApiService {
@@ -117,8 +122,10 @@ HttpManager.getManager().doWithExtraBaseUrl { _isLoading.value = it }.apply {
 ```
 注意 doWithExtraBaseUrl 这个函数中的表达式，里边的it为一个布尔值，在这里你可以根据需要自定义加载状态即可。
 
+
 普通协程版就到这里吧，下边再来看下Flow版本。
 
+<!--
 ##### Flow版
 
 flow版本的Apiservice接口函数返回的是一个suspend类型，同时返回类型直接就是实体类型，注意和普通协程版的区别。
@@ -166,6 +173,7 @@ HttpManager.getManager().doWithExtraBaseUrl().observe(viewLifecycleOwner, Observ
 })
 
 ```
+-->
 
 #### 模板代码的配置
 
