@@ -1,6 +1,5 @@
 package com.github.frame.httpx.http
 
-import com.github.frame.httpx.bean.PagingBean
 import com.github.frame.httpx.bean.TestBean
 import com.github.frame.httpx.bean.TestBeanChind
 import com.github.frame.httpx.bean.WeatherInfo
@@ -13,14 +12,12 @@ class HttpManager : BaseHttpManager() {
 
     //==============your codes ====================
 
-    suspend fun doWithBaseRequest(): Result<TestBean?> = request(apiService.test())
+    suspend fun doWithBaseRequest(): Result<TestBean> = request(apiService.test())
 
-    suspend fun doWithFormatResponse(): Result<TestBeanChind?> = requestFormat(apiService.test1())
+    suspend fun doWithFormatResponse(): Result<TestBeanChind> = requestFormat(apiService.test1())
 
-    suspend fun doWithExtraBaseUrl(onLoading: (isLoading: Boolean) -> Unit): Result<WeatherInfo?> =
+    suspend fun doWithExtraBaseUrl(onLoading: (isLoading: Boolean) -> Unit): Result<WeatherInfo> =
         requestFormatWithLoading(apiService.test2(), onLoading)
-
-    suspend fun pagingTest(): Result<List<PagingBean>?> = requestFormat(apiService.test3())
 
     //===============Template codes=================
     private lateinit var apiService: ApiService

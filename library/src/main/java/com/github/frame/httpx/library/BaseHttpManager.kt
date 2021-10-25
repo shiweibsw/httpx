@@ -97,22 +97,22 @@ abstract class BaseHttpManager {
 
     suspend fun <T> request(
         deferred: Deferred<Response<T>>
-    ): Result<T?> = requestWithLoading(deferred) {}
+    ): Result<T> = requestWithLoading(deferred) {}
 
     suspend fun <T> requestFormat(
         deferred: Deferred<Response<ApiResponse<T>>>
-    ): Result<T?> = requestFormatWithLoading(deferred) {}
+    ): Result<T> = requestFormatWithLoading(deferred) {}
 
     suspend fun <T> requestWithLoading(
         deferred: Deferred<Response<T>>,
         onLoading: (isLoading: Boolean) -> Unit
-    ): Result<T?> =
+    ): Result<T> =
         try {
             onLoading(true)
             val response = deferred.await()
             if (response.isSuccessful) {
                 if (response.body() != null) {
-                    Result.Success(response.body())
+                    Result.Success(response.body()!!)
                 } else {
                     Result.DefError(java.lang.Exception(response.errorBody().toString()))
                 }
@@ -128,15 +128,15 @@ abstract class BaseHttpManager {
     suspend fun <T> requestFormatWithLoading(
         deferred: Deferred<Response<ApiResponse<T>>>,
         onLoading: (isLoading: Boolean) -> Unit
-    ): Result<T?> =
+    ): Result<T> =
         try {
             onLoading(true)
             val response = deferred.await()
             if (response.isSuccessful && response.body() != null) {
                 if (response.body()?.getCode() == successCode) {
-                    Result.Success(response.body()?.getDatas())
+                    Result.Success(response.body()!!.getDatas()!!)
                 } else {
-                    Result.Error(response.body()?.getCode(), response.body()?.getMsg())
+                    Result.Error(response.body()?.getCode() ?: -1, response.body()?.getMsg() ?: "")
                 }
             } else {
                 Result.Error(response.code(), response.errorBody().toString())
