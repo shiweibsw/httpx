@@ -85,7 +85,6 @@ abstract class BaseHttpManager {
         }.addInterceptor(HttpLoggingInterceptor { message ->
             Log.i(loggerTag, message)
         }.also { it.level = HttpLoggingInterceptor.Level.BODY })
-
     }
 
     private fun createRetrofit(): Retrofit = Retrofit.Builder().apply {
