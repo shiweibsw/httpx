@@ -19,7 +19,7 @@ class MainViewModel : ViewModel() {
     val isLoading: LiveData<Boolean> = _isLoading
 
     private fun setRespBody(content: String) {
-        _respBody.value = content
+        _respBody.postValue(content)
     }
 
     /**
