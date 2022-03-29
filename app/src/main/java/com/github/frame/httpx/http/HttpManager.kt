@@ -59,6 +59,4 @@ class HttpManager : BaseHttpManager() {
     private fun createApiService() {
         apiService = provideRetrofit().create(ApiService::class.java)
     }
-
-
 }
