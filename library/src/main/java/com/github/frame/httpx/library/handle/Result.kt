@@ -6,13 +6,13 @@ import java.lang.Exception
 
 sealed class Result<out R> {
 
-    data class Success<out T>(val data: T) : Result<T>()
+    data class Success<out T>(val data: T?) : Result<T>()
     data class Error(val code: Int, val msg: String) : Result<Nothing>()
     data class DefError(val exception: Exception) : Result<Nothing>()
 //    object Loading : Result<Nothing>()
 }
 
-suspend fun <T> Result<T>.onSuccess(success: (T) -> Unit) {
+suspend fun <T> Result<T>.onSuccess(success: (T?) -> Unit) {
     val _this = this
     withContext(Dispatchers.Main) {
         if (_this is Result.Success) {

@@ -23,10 +23,13 @@ abstract class BaseHttpManager {
     private var loggerTag: String = DEFAULT_LOGGER_TAG
     private val _mRetrofit by lazy { createRetrofit() }
     private val _okHttpBuilder by lazy { createOkHttpBuilder() }
+    private lateinit var _okHttpClient: OkHttpClient
 
     fun provideRetrofit(): Retrofit = _mRetrofit
 
     fun provideOkHttpBuilder(): OkHttpClient.Builder = _okHttpBuilder
+
+    fun provideOkHttpClient(): OkHttpClient = _okHttpClient
 
     /**
      * set the baseurl
@@ -89,7 +92,8 @@ abstract class BaseHttpManager {
 
     private fun createRetrofit(): Retrofit = Retrofit.Builder().apply {
         baseUrl(baseUrl)
-        client(_okHttpBuilder.build())
+        _okHttpClient = _okHttpBuilder.build()
+        client(_okHttpClient)
         addConverterFactory(GsonConverterFactory.create())
         addCallAdapterFactory(CoroutineCallAdapterFactory())
     }.build()
@@ -133,7 +137,7 @@ abstract class BaseHttpManager {
             val response = deferred.await()
             if (response.isSuccessful && response.body() != null) {
                 if (response.body()?.getCode() == successCode) {
-                    Result.Success(response.body()!!.getDatas()!!)
+                    Result.Success(response.body()!!.getDatas())
                 } else {
                     Result.Error(response.body()?.getCode() ?: -1, response.body()?.getMsg() ?: "")
                 }
@@ -141,7 +145,7 @@ abstract class BaseHttpManager {
                 Result.Error(response.code(), response.errorBody().toString())
             }
         } catch (e: Exception) {
-            Result.Error(-1, e.message.toString())
+            Result.Error(-1, "网络连接异常,请稍候重试")
         } finally {
             onLoading(false)
         }

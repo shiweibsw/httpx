@@ -48,5 +48,5 @@ dependencies {
     api "androidx.lifecycle:lifecycle-livedata-ktx:$archLifecycleVersion"
     debugImplementation 'com.readystatesoftware.chuck:library:1.0.4'
     releaseImplementation 'com.readystatesoftware.chuck:library-no-op:1.0.4'
-//    implementation 'io.github.shiweibsw:httpx:1.0.1'
+//    implementation 'io.github.shiweibsw:httpx:1.0.2'
 }
